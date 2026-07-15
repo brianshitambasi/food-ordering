@@ -1,5 +1,11 @@
 const express = require('express');
-const { registerUser, loginUser, getUserProfile } = require('../controllers/authController');
+const { 
+  registerUser, 
+  loginUser, 
+  requestOTP, 
+  verifyOTP, 
+  getUserProfile 
+} = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
 const { body } = require('express-validator');
 const validate = require('../middleware/validation');
@@ -26,6 +32,9 @@ router.post(
   validate,
   loginUser
 );
+
+router.post('/request-otp', requestOTP);
+router.post('/verify-otp', verifyOTP);
 
 router.get('/profile', protect, getUserProfile);
 
