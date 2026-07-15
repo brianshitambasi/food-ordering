@@ -67,13 +67,16 @@ const updateFood = async (req, res) => {
 // @route   DELETE /api/foods/:id
 // @access  Private/Admin
 const deleteFood = async (req, res) => {
-  const food = await Food.findById(req.params.id);
-  if (food) {
-    await food.remove();
+  try {
+    const food = await Food.findById(req.params.id);
+    if (!food) {
+      return res.status(404).json({ message: 'Food not found' });
+    }
+    // Use deleteOne() instead of remove() (deprecated)
+    await Food.deleteOne({ _id: req.params.id });
     res.json({ message: 'Food removed' });
-  } else {
-    res.status(404);
-    throw new Error('Food not found');
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
